@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simple Location Map</title>
+  <title>Where Am I?</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     html, body, #map {
@@ -11,30 +11,39 @@
       padding: 0;
       height: 100%;
       width: 100%;
+      background: #111;
+    }
+    #error {
+      position: absolute;
+      top: 0; left: 0;
+      right: 0; bottom: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background-color: #000;
+      color: #fff;
+      font-size: 1.5em;
+      padding: 1em;
+      text-align: center;
     }
   </style>
 </head>
 <body>
   <div id="map"></div>
+  <div id="error">⚠️ Location not available. Please enable location services and refresh.</div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    // Initialize map
     const map = L.map('map', { zoomControl: false });
 
-    // Add CARTO Dark basemap
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+    const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 19
     }).addTo(map);
 
-    // Get user location
-    map.locate({ setView: true, maxZoom: 16 });
-
-    // Show a marker at the user's location
-    function onLocationFound(e) {
-      L.circleMarker(e.latlng, {
+    function showLocation(latlng) {
+      map.setView(latlng, 16);
+      L.circleMarker(latlng, {
         radius: 8,
         fillColor: '#00BFFF',
         color: '#fff',
@@ -44,12 +53,29 @@
       }).addTo(map);
     }
 
-    map.on('locationfound', onLocationFound);
+    function showError() {
+      document.getElementById('error').style.display = 'flex';
+    }
 
-    // Handle location error
-    map.on('locationerror', function() {
-      alert("Couldn't find your location 😕");
-    });
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          showLocation([latitude, longitude]);
+        },
+        (error) => {
+          console.warn('Location error:', error.message);
+          showError();
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      showError();
+    }
   </script>
 </body>
 </html>
