@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mobile Map</title>
+  <title>Simple Mobile Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <style>
@@ -14,13 +14,6 @@
       width: 100%;
       background: #111;
       font-family: sans-serif;
-    }
-    .leaflet-top.leaflet-right {
-      top: 10px;
-      right: 10px;
-    }
-    .leaflet-control-geocoder-form input {
-      width: 200px;
     }
     #error {
       position: absolute;
@@ -36,13 +29,16 @@
       text-align: center;
       z-index: 999;
     }
+    .leaflet-control-geocoder-form input {
+      width: 200px;
+    }
   </style>
 </head>
 <body>
   <div id="map"></div>
   <div id="error">⚠️ Location not available. Please enable location services and refresh.</div>
 
-  <!-- JS Libraries -->
+  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
@@ -65,7 +61,7 @@
     });
     cartoDark.addTo(map);
 
-    // Layer Control
+    // Layer control (bottom right)
     const baseMaps = {
       "CARTO Dark": cartoDark,
       "CARTO Light": cartoLight,
@@ -73,7 +69,10 @@
     };
     L.control.layers(baseMaps, null, { position: 'bottomright' }).addTo(map);
 
-    // --- User Location Marker ---
+    // Marker for user search
+    let geocoderControl;
+
+    // --- Geolocation handler ---
     function showLocation(latlng) {
       map.setView(latlng, 16);
       L.circleMarker(latlng, {
@@ -84,12 +83,48 @@
         opacity: 1,
         fillOpacity: 0.8
       }).addTo(map);
+
+      // --- Setup bounded geocoder ---
+      const lat = latlng[0];
+      const lon = latlng[1];
+      const delta = 0.1; // ~10km
+
+      const viewbox = [
+        lon - delta,  // minLon
+        lat + delta,  // maxLat
+        lon + delta,  // maxLon
+        lat - delta   // minLat
+      ];
+
+      // Remove previous geocoder
+      if (geocoderControl) {
+        map.removeControl(geocoderControl);
+      }
+
+      geocoderControl = L.Control.geocoder({
+        defaultMarkGeocode: false,
+        placeholder: "Search nearby...",
+        errorMessage: "No results found",
+        geocoder: L.Control.Geocoder.nominatim({
+          viewbox: viewbox.join(','),
+          bounded: 1
+        })
+      })
+      .on('markgeocode', function(e) {
+        const latlng = e.geocode.center;
+        L.marker(latlng).addTo(map)
+          .bindPopup(e.geocode.name)
+          .openPopup();
+        map.setView(latlng, 16);
+      })
+      .addTo(map);
     }
 
     function showError() {
       document.getElementById('error').style.display = 'flex';
     }
 
+    // Get user location
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -109,22 +144,6 @@
     } else {
       showError();
     }
-
-    // --- Geocoder Search ---
-    const geocoder = L.Control.geocoder({
-      defaultMarkGeocode: false,
-      placeholder: "Search...",
-      errorMessage: "Location not found",
-      geocoder: L.Control.Geocoder.nominatim()
-    })
-    .on('markgeocode', function(e) {
-      const latlng = e.geocode.center;
-      L.marker(latlng).addTo(map)
-        .bindPopup(e.geocode.name)
-        .openPopup();
-      map.setView(latlng, 16);
-    })
-    .addTo(map);
   </script>
 </body>
 </html>
