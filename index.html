@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Where Am I?</title>
+  <title>Simple Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     html, body, #map {
@@ -12,6 +12,9 @@
       height: 100%;
       width: 100%;
       background: #111;
+    }
+    .leaflet-control-layers {
+      font-size: 14px;
     }
     #error {
       position: absolute;
@@ -25,6 +28,7 @@
       font-size: 1.5em;
       padding: 1em;
       text-align: center;
+      z-index: 999;
     }
   </style>
 </head>
@@ -34,13 +38,40 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const map = L.map('map', { zoomControl: false });
+    const map = L.map('map', {
+      zoomControl: false,
+      center: [0, 0], // temporary until GPS works
+      zoom: 2
+    });
 
-    const tiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // --- Base Layers ---
+    const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 19
-    }).addTo(map);
+    });
 
+    const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19
+    });
+
+    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri',
+      maxZoom: 19
+    });
+
+    // Set initial layer
+    cartoDark.addTo(map);
+
+    // --- Basemap Toggle Control ---
+    const baseMaps = {
+      "CARTO Dark": cartoDark,
+      "CARTO Light": cartoLight,
+      "Satellite": esriSat
+    };
+    L.control.layers(baseMaps, null, { position: 'bottomright' }).addTo(map);
+
+    // --- Geolocation ---
     function showLocation(latlng) {
       map.setView(latlng, 16);
       L.circleMarker(latlng, {
