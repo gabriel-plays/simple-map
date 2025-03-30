@@ -19,7 +19,7 @@ const vectorLayer = protomapsL.leafletLayer({
   url: "https://tiles.gab-plays.work/boundaries.pmtiles",
   paintRules: [
     {
-      dataLayer: "layer0", // this is often 'layer0', can be verified in tile metadata
+      dataLayer: "boundaries", // this is often 'layer0', can be verified in tile metadata
       symbolizer: {
         kind: "fill",
         color: "#00BFFF",
