@@ -93,4 +93,31 @@ const map = L.map('map', {
   } else {
     showError();
   }
+
+// Create a new PMTiles source
+const protocol = new pmtiles.Protocol();
+map.addProtocol("pmtiles", protocol.tile);
+
+// Load the PMTiles file from GitHub (relative path is fine!)
+const pmtilesUrl = "tiles/boundaries.pmtiles";
+
+// Add vector tiles to Leaflet using Protomaps
+const vectorLayer = protomapsL.leafletLayer({
+  url: pmtilesUrl,
+  paintRules: [
+    {
+      dataLayer: "layer0", // the layer name used during PMTiles generation
+      symbolizer: {
+        kind: "fill",
+        color: "#00BFFF",
+        opacity: 0.15,
+        stroke: "#00BFFF",
+        strokeWidth: 1
+      }
+    }
+  ]
+});
+
+vectorLayer.addTo(map);
+
   
