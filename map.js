@@ -13,7 +13,6 @@ cartoDark.addTo(map);
 
 // Add your PMTiles vector layer
 const protocol = new pmtiles.Protocol();
-map.addProtocol("pmtiles", protocol.tile);
 
 const vectorLayer = protomapsL.leafletLayer({
   url: "https://tiles.gab-plays.work/boundaries.pmtiles",
