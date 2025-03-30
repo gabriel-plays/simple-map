@@ -11,9 +11,6 @@ const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x
 });
 cartoDark.addTo(map);
 
-// Add your PMTiles vector layer
-const protocol = new pmtiles.Protocol();
-
 const vectorLayer = protomapsL.leafletLayer({
   url: "https://tiles.gab-plays.work/boundaries.pmtiles",
   paintRules: [
