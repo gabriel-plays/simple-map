@@ -62,3 +62,37 @@ denyBtn.addEventListener('click', () => {
 function showError() {
   document.getElementById('error').style.display = 'flex';
 }
+
+document.getElementById('locate-btn').addEventListener('click', () => {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log("Manual locate:", latitude, longitude);
+
+        map.flyTo({
+          center: [longitude, latitude],
+          zoom: 14,
+          speed: 1.2,
+          curve: 1
+        });
+
+        new maplibregl.Marker({ color: "#00BFFF" })
+          .setLngLat([longitude, latitude])
+          .addTo(map);
+      },
+      (error) => {
+        console.warn("Geolocation error:", error.message);
+        showError();
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      }
+    );
+  } else {
+    showError();
+  }
+});
+
