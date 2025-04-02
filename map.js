@@ -29,7 +29,28 @@ map.on('load', () => {
 // Custom popup logic
 document.getElementById('allow-btn').addEventListener('click', () => {
   document.getElementById('location-popup').style.display = 'none';
-  geolocateControl.trigger(); // Ask for location only after user allows
+
+  if (!navigator.geolocation) {
+    showError();
+    return;
+  }
+
+  // Check permissions
+  if (navigator.permissions) {
+    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+      if (result.state === 'granted' || result.state === 'prompt') {
+        geolocateControl.trigger();
+      } else {
+        showError(); // Permission denied or blocked
+      }
+    }).catch(() => {
+      // Permissions API not supported, fallback
+      geolocateControl.trigger();
+    });
+  } else {
+    // Permissions API not supported, fallback
+    geolocateControl.trigger();
+  }
 });
 
 document.getElementById('deny-btn').addEventListener('click', () => {
