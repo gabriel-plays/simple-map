@@ -13,8 +13,15 @@
 </head>
 <body>
   <div id="map"></div>
-  <div id="error">⚠️ Location not available. Please enable location services and refresh.</div>
-
+    <div id="location-popup">
+    <div class="popup-content">
+      <p>Allow this map to access your location?</p>
+      <div class="popup-buttons">
+        <button id="allow-btn">Yes</button>
+        <button id="deny-btn">No</button>
+      </div>
+    </div>
+  </div>
   <script src="map.js"></script>
 </body>
 </html>
