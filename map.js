@@ -1,4 +1,4 @@
-// Init map
+// Initialize map
 const map = new maplibregl.Map({
   container: 'map',
   style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
@@ -10,7 +10,7 @@ const map = new maplibregl.Map({
 // Controls
 map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
 
-// Built-in Locate Me (GeolocateControl)
+// Native "Locate Me" button from MapLibre
 const geolocateControl = new maplibregl.GeolocateControl({
   positionOptions: {
     enableHighAccuracy: true
@@ -21,22 +21,23 @@ const geolocateControl = new maplibregl.GeolocateControl({
 });
 map.addControl(geolocateControl, 'bottom-right');
 
-// Show popup after map load
+// Show custom popup after map is fully loaded
 map.on('load', () => {
   document.getElementById('location-popup').style.display = 'flex';
 });
 
-// Error message fallback
-function showError() {
-  document.getElementById('error').style.display = 'flex';
-}
-
-// Popup buttons
+// Custom popup logic
 document.getElementById('allow-btn').addEventListener('click', () => {
   document.getElementById('location-popup').style.display = 'none';
-  geolocateControl.trigger(); // Use MapLibre's native locate action
+  geolocateControl.trigger(); // Ask for location only after user allows
 });
 
 document.getElementById('deny-btn').addEventListener('click', () => {
   document.getElementById('location-popup').style.display = 'none';
+});
+
+// If location fails (user denies or not available), show the custom fallback
+geolocateControl.on('error', (e) => {
+  console.warn("MapLibre location error:", e);
+  document.getElementById('error').style.display = 'flex';
 });
