@@ -1,49 +1,66 @@
 window.onload = () => {
   const map = new maplibregl.Map({
     container: "map",
-    style: {
-      version: 8,
-      sources: {
-        carto: {
-          type: "raster",
-          tiles: [
-            "https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}@2x.png"
-          ],
-          tileSize: 256,
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
-        }
-      },
-      layers: [
-        {
-          id: "carto",
-          type: "raster",
-          source: "carto"
-        }
-      ]
-    },
+    style: createStyle("dark"), // Default basemap
     center: [0, 0],
     zoom: 2
   });
 
-  // Zoom + rotate control
-  const nav = new maplibregl.NavigationControl({
-    visualizePitch: true
-  });
+  const nav = new maplibregl.NavigationControl({ visualizePitch: true });
   map.addControl(nav, "bottom-right");
 
-  // Geolocate (user location) control
   const geolocate = new maplibregl.GeolocateControl({
-    positionOptions: {
-      enableHighAccuracy: true
-    },
+    positionOptions: { enableHighAccuracy: true },
     trackUserLocation: true,
     showUserHeading: true
   });
   map.addControl(geolocate, "bottom-right");
 
-  // Optional: trigger geolocation once the map loads
-  map.on('load', () => {
+  // Optional auto trigger
+  map.on("load", () => {
     geolocate.trigger();
   });
+
+  // Basemap switcher
+  const selector = document.getElementById("basemap-select");
+  selector.addEventListener("change", () => {
+    const selected = selector.value;
+    map.setStyle(createStyle(selected));
+  });
+
+  // Helper to return style object
+  function createStyle(type) {
+    let tileURL = "";
+    let attribution = "";
+
+    if (type === "dark") {
+      tileURL = "https://basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}@2x.png";
+      attribution = '&copy; OSM &copy; <a href="https://carto.com/">CARTO</a>';
+    } else if (type === "light") {
+      tileURL = "https://basemaps.cartocdn.com/rastertiles/light_all/{z}/{x}/{y}@2x.png";
+      attribution = '&copy; OSM &copy; <a href="https://carto.com/">CARTO</a>';
+    } else if (type === "esri") {
+      tileURL = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
+      attribution = "Tiles &copy; Esri";
+    }
+
+    return {
+      version: 8,
+      sources: {
+        basemap: {
+          type: "raster",
+          tiles: [tileURL],
+          tileSize: 256,
+          attribution: attribution
+        }
+      },
+      layers: [
+        {
+          id: "basemap",
+          type: "raster",
+          source: "basemap"
+        }
+      ]
+    };
+  }
 };
