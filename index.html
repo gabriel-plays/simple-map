@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carto Black Map</title>
+  <title>MapLibre App</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
 <body>
- <div id="map"></div>
+  <div id="map"></div>
+
+  <!-- 🔘 Basemap selector -->
   <div id="basemap-selector">
     <select id="basemap-select">
       <option value="dark">Carto Dark</option>
@@ -17,8 +19,23 @@
     </select>
   </div>
 
+  <!-- 🧩 Layer Controls -->
+  <div id="layer-controls">
+    <label>
+      <input type="checkbox" id="toggle-boundaries" checked />
+      Show Boundaries
+    </label>
+    <br />
+    Fill Color:
+    <input type="color" id="fill-color" value="#ffcc00" />
+    <br />
+    Fill Opacity:
+    <input type="range" id="fill-opacity" min="0" max="1" step="0.1" value="0.5" />
+  </div>
+
+  <!-- 🔗 Scripts -->
   <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/pmtiles@3.1.2/dist/pmtiles.umd.js"></script>
   <script src="map.js"></script>
 </body>
 </html>
- 
