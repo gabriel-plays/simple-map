@@ -9,10 +9,9 @@ const map = new maplibregl.Map({
 
 // Lock viewport to bounds
 const bounds = [
-  [13.072357, -35.061477], // Southwest
-  [35.858002, -21.876792]  // Northeast
+  [4.700775,-38.186387], // Southwest
+  [46.558685,-19.704658]  // Northeast
 ];
-
 map.setMaxBounds(bounds);       // restrict panning
 map.fitBounds(bounds);          // zoom to bounds on load
 map.setMinZoom(map.getZoom()); // prevent zooming out further
