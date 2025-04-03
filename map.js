@@ -1,5 +1,5 @@
-// Register pmtiles protocol for MapLibre
-let protocol = new pmtiles.Protocol();
+// Register PMTiles protocol for MapLibre
+const protocol = new pmtiles.Protocol();
 maplibregl.addProtocol("pmtiles", protocol);
 
 const map = new maplibregl.Map({
@@ -9,37 +9,37 @@ const map = new maplibregl.Map({
     sources: {},
     layers: []
   },
-  center: [18.4, -33.9],
+  center: [18.4, -33.9], // Centered on Cape Town
   zoom: 10
 });
 
 map.on("load", () => {
-  // Add the PMTiles vector source
+  // Add PMTiles vector source
   map.addSource("boundaries", {
     type: "vector",
     url: "pmtiles://https://gab-plays.work/tiles/boundaries.pmtiles"
   });
 
-  // Add transparent light blue polygon fill
+  // Add polygon fill (transparent light blue)
   map.addLayer({
     id: "boundaries-fill",
     type: "fill",
     source: "boundaries",
-    "source-layer": "boundaries", // replace if needed
+    "source-layer": "boundaries", // <- replace if needed
     paint: {
-      "fill-color": "#add8e6",  // light blue
+      "fill-color": "#add8e6",
       "fill-opacity": 0.3
     }
   });
 
-  // Add thin black polygon outline
+  // Add polygon outline (thin black line)
   map.addLayer({
     id: "boundaries-outline",
     type: "line",
     source: "boundaries",
-    "source-layer": "boundaries", // replace if needed
+    "source-layer": "boundaries", // <- replace if needed
     paint: {
-      "line-color": "#000000",  // black
+      "line-color": "#000000",
       "line-width": 0.5
     }
   });
