@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.onload = () => {
   const protocol = new pmtiles.Protocol();
   maplibregl.addProtocol("pmtiles", protocol.tile);
 
@@ -52,4 +52,4 @@ document.addEventListener("DOMContentLoaded", () => {
     center: [18.4241, -33.9249], // Cape Town
     zoom: 10
   });
-});
+};
