@@ -1,4 +1,4 @@
-window.onload = () => {
+window.addEventListener("load", () => {
   const protocol = new pmtiles.Protocol();
   maplibregl.addProtocol("pmtiles", protocol.tile);
 
