@@ -1,34 +1,29 @@
 window.onload = () => {
+  const protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile);
+
   const map = new maplibregl.Map({
     container: "map",
-    style: createStyle("dark"), // Default basemap
-    center: [0, 0],
-    zoom: 2
+    style: createStyle("dark"),
+    center: [18.4241, -33.9249], // Cape Town
+    zoom: 10
   });
 
-  const nav = new maplibregl.NavigationControl({ visualizePitch: true });
-  map.addControl(nav, "bottom-right");
-
-  const geolocate = new maplibregl.GeolocateControl({
+  // Controls
+  map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+  map.addControl(new maplibregl.GeolocateControl({
     positionOptions: { enableHighAccuracy: true },
     trackUserLocation: true,
     showUserHeading: true
-  });
-  map.addControl(geolocate, "bottom-right");
+  }), "bottom-right");
 
-  // Optional auto trigger
-  map.on("load", () => {
-    geolocate.trigger();
-  });
-
-  // Basemap switcher
-  const selector = document.getElementById("basemap-select");
-  selector.addEventListener("change", () => {
-    const selected = selector.value;
+  // Basemap selector
+  document.getElementById("basemap-select").addEventListener("change", (e) => {
+    const selected = e.target.value;
     map.setStyle(createStyle(selected));
   });
 
-  // Helper to return style object
+  // Style builder
   function createStyle(type) {
     let tileURL = "";
     let attribution = "";
@@ -62,5 +57,58 @@ window.onload = () => {
         }
       ]
     };
+  }
+
+  // Add boundaries layer when style is ready
+  map.on("style.load", () => {
+    map.addSource("boundaries", {
+      type: "vector",
+      url: "pmtiles://https://gab-plays.work/tiles/boundaries.pmtiles"
+    });
+
+    map.addLayer({
+      id: "boundaries-fill",
+      type: "fill",
+      source: "boundaries",
+      "source-layer": "boundaries",
+      paint: {
+        "fill-color": "#ffcc00",
+        "fill-opacity": 0.5
+      }
+    });
+
+    map.addLayer({
+      id: "boundaries-outline",
+      type: "line",
+      source: "boundaries",
+      "source-layer": "boundaries",
+      paint: {
+        "line-color": "#ffffff",
+        "line-width": 1
+      }
+    });
+
+    // Wire up UI controls once layers exist
+    setupUI();
+  });
+
+  function setupUI() {
+    const toggle = document.getElementById("toggle-boundaries");
+    const fillColor = document.getElementById("fill-color");
+    const fillOpacity = document.getElementById("fill-opacity");
+
+    toggle.addEventListener("change", () => {
+      const vis = toggle.checked ? "visible" : "none";
+      map.setLayoutProperty("boundaries-fill", "visibility", vis);
+      map.setLayoutProperty("boundaries-outline", "visibility", vis);
+    });
+
+    fillColor.addEventListener("input", () => {
+      map.setPaintProperty("boundaries-fill", "fill-color", fillColor.value);
+    });
+
+    fillOpacity.addEventListener("input", () => {
+      map.setPaintProperty("boundaries-fill", "fill-opacity", parseFloat(fillOpacity.value));
+    });
   }
 };
