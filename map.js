@@ -25,4 +25,10 @@ window.onload = () => {
     center: [0, 0],
     zoom: 2
   });
+
+  // Add zoom and rotation controls to the bottom right
+  const nav = new maplibregl.NavigationControl({
+    visualizePitch: true
+  });
+  map.addControl(nav, "bottom-right");
 };
