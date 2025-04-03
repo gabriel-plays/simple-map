@@ -26,9 +26,24 @@ window.onload = () => {
     zoom: 2
   });
 
-  // Add zoom and rotation controls to the bottom right
+  // Zoom + rotate control
   const nav = new maplibregl.NavigationControl({
     visualizePitch: true
   });
   map.addControl(nav, "bottom-right");
+
+  // Geolocate (user location) control
+  const geolocate = new maplibregl.GeolocateControl({
+    positionOptions: {
+      enableHighAccuracy: true
+    },
+    trackUserLocation: true,
+    showUserHeading: true
+  });
+  map.addControl(geolocate, "bottom-right");
+
+  // Optional: trigger geolocation once the map loads
+  map.on('load', () => {
+    geolocate.trigger();
+  });
 };
