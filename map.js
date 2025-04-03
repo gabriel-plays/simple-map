@@ -35,3 +35,38 @@ map.addControl(geolocateControl, 'bottom-right');
 map.on('load', () => {
   document.getElementById('location-popup').style.display = 'flex';
 });
+// Register pmtiles protocol for MapLibre
+let protocol = new pmtiles.Protocol();
+maplibregl.addProtocol("pmtiles", protocol);
+
+map.on("load", () => {
+  // PMTiles vector source
+  map.addSource("boundaries", {
+    type: "vector",
+    url: "pmtiles://https://gab-plays.work/tiles/boundaries.pmtiles"
+  });
+
+  // Fill layer
+  map.addLayer({
+    id: "boundaries-fill",
+    type: "fill",
+    source: "boundaries",
+    "source-layer": "boundaries", // <-- replace this if needed
+    paint: {
+      "fill-color": "#00aaff",
+      "fill-opacity": 0.3
+    }
+  });
+
+  // Outline layer
+  map.addLayer({
+    id: "boundaries-outline",
+    type: "line",
+    source: "boundaries",
+    "source-layer": "boundaries", // <-- replace this if needed
+    paint: {
+      "line-color": "#0077cc",
+      "line-width": 1.2
+    }
+  });
+});
