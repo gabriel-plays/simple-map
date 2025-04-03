@@ -8,9 +8,17 @@
   <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="map"></div>
+ <div id="map"></div>
+  <div id="basemap-selector">
+    <select id="basemap-select">
+      <option value="dark">Carto Dark</option>
+      <option value="light">Carto Light</option>
+      <option value="esri">Esri Imagery</option>
+    </select>
+  </div>
 
   <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
   <script src="map.js"></script>
 </body>
 </html>
+ 
