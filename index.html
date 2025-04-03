@@ -1,18 +1,52 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simple Mobile Map</title>
-
-  <!-- MapLibre -->
-  <link href="https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.css" rel="stylesheet" />
-  <script src="https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.js"></script>
-
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="utf-8" />
+    <title>MapLibre PMTiles Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; }
+        #map { width: 100%; height: 100%; }
+    </style>
+    <link href="https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
 <body>
-  <div id="map"></div>
-  <script src="map.js"></script>
+    <div id="map"></div>
+    <script src="https://unpkg.com/maplibre-gl@3.2.1/dist/maplibre-gl.js"></script>
+    <script src="https://unpkg.com/pmtiles@3.1.2/dist/index.js"></script>
+    <script>
+        // Set up PMTiles protocol
+        const protocol = new pmtiles.Protocol();
+        maplibregl.addProtocol("pmtiles", protocol.tile);
+
+        // Create a MapLibre map
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: {
+                version: 8,
+                sources: {
+                    boundaries: {
+                        type: "vector",
+                        url: "pmtiles://https://gab-plays.work/tiles/boundaries.pmtiles"
+                    }
+                },
+                layers: [
+                    {
+                        id: "boundaries-layer",
+                        type: "line",
+                        source: "boundaries",
+                        "source-layer": "boundaries", // this layer name must match the actual layer name in your PMTiles file
+                        paint: {
+                            "line-color": "#ff0000",
+                            "line-width": 2
+                        }
+                    }
+                ]
+            },
+            center: [18.4, -33.9],
+            zoom: 10
+        });
+    </script>
 </body>
 </html>
