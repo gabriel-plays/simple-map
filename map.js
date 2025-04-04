@@ -1,13 +1,6 @@
-// ✅ Wait for the DOM and all scripts to fully load
+let boundariesAdded = false;
+
 window.addEventListener("load", () => {
-  if (typeof pmtiles === "undefined") {
-    console.error("PMTiles library is not loaded yet.");
-    return;
-  }
-
-  const protocol = new pmtiles.Protocol();
-  maplibregl.addProtocol("pmtiles", protocol.tile);
-
   const map = new maplibregl.Map({
     container: "map",
     style: createStyle("dark"),
@@ -24,6 +17,72 @@ window.addEventListener("load", () => {
 
   document.getElementById("basemap-select").addEventListener("change", (e) => {
     map.setStyle(createStyle(e.target.value));
+  });
+
+  const toggle = document.getElementById("toggle-boundaries");
+  const fillColor = document.getElementById("fill-color");
+  const fillOpacity = document.getElementById("fill-opacity");
+
+  toggle.addEventListener("change", async () => {
+    if (!boundariesAdded && toggle.checked) {
+      try {
+        // Load PMTiles only when needed
+        const script = document.createElement("script");
+        script.src = "https://unpkg.com/pmtiles@3.1.2/dist/pmtiles.umd.js";
+        script.onload = () => {
+          const protocol = new pmtiles.Protocol();
+          maplibregl.addProtocol("pmtiles", protocol.tile);
+
+          map.addSource("boundaries", {
+            type: "vector",
+            url: "pmtiles://https://gab-plays.work/tiles/boundaries.pmtiles"
+          });
+
+          map.addLayer({
+            id: "boundaries-fill",
+            type: "fill",
+            source: "boundaries",
+            "source-layer": "boundaries",
+            paint: {
+              "fill-color": fillColor.value,
+              "fill-opacity": parseFloat(fillOpacity.value)
+            }
+          });
+
+          map.addLayer({
+            id: "boundaries-outline",
+            type: "line",
+            source: "boundaries",
+            "source-layer": "boundaries",
+            paint: {
+              "line-color": "#ffffff",
+              "line-width": 1
+            }
+          });
+
+          boundariesAdded = true;
+        };
+        document.body.appendChild(script);
+      } catch (e) {
+        console.error("Failed to load PMTiles or add layer:", e);
+      }
+    } else if (boundariesAdded) {
+      const vis = toggle.checked ? "visible" : "none";
+      map.setLayoutProperty("boundaries-fill", "visibility", vis);
+      map.setLayoutProperty("boundaries-outline", "visibility", vis);
+    }
+  });
+
+  fillColor.addEventListener("input", () => {
+    if (boundariesAdded) {
+      map.setPaintProperty("boundaries-fill", "fill-color", fillColor.value);
+    }
+  });
+
+  fillOpacity.addEventListener("input", () => {
+    if (boundariesAdded) {
+      map.setPaintProperty("boundaries-fill", "fill-opacity", parseFloat(fillOpacity.value));
+    }
   });
 
   function createStyle(type) {
@@ -60,51 +119,4 @@ window.addEventListener("load", () => {
       ]
     };
   }
-
-  map.on("style.load", () => {
-    map.addSource("boundaries", {
-      type: "vector",
-      url: "pmtiles://https://gab-plays.work/tiles/boundaries.pmtiles"
-    });
-
-    map.addLayer({
-      id: "boundaries-fill",
-      type: "fill",
-      source: "boundaries",
-      "source-layer": "boundaries",
-      paint: {
-        "fill-color": "#ffcc00",
-        "fill-opacity": 0.5
-      }
-    });
-
-    map.addLayer({
-      id: "boundaries-outline",
-      type: "line",
-      source: "boundaries",
-      "source-layer": "boundaries",
-      paint: {
-        "line-color": "#ffffff",
-        "line-width": 1
-      }
-    });
-
-    const toggle = document.getElementById("toggle-boundaries");
-    const fillColor = document.getElementById("fill-color");
-    const fillOpacity = document.getElementById("fill-opacity");
-
-    toggle.addEventListener("change", () => {
-      const vis = toggle.checked ? "visible" : "none";
-      map.setLayoutProperty("boundaries-fill", "visibility", vis);
-      map.setLayoutProperty("boundaries-outline", "visibility", vis);
-    });
-
-    fillColor.addEventListener("input", () => {
-      map.setPaintProperty("boundaries-fill", "fill-color", fillColor.value);
-    });
-
-    fillOpacity.addEventListener("input", () => {
-      map.setPaintProperty("boundaries-fill", "fill-opacity", parseFloat(fillOpacity.value));
-    });
-  });
 });
