@@ -1,26 +1,17 @@
 
 let map = new maplibregl.Map({
     container: 'map',
-    style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+    style: 'https://tiles.basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
     center: [0, 0],
     zoom: 1
 });
 
-function locateMe() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-            map.flyTo({
-                center: [position.coords.longitude, position.coords.latitude],
-                zoom: 10
-            });
-        }, () => {
-            alert("Geolocation failed.");
-        });
-    } else {
-        alert("Geolocation not supported.");
-    }
-}
-
-function orientate() {
-    map.resetNorth();
-}
+// Add default map controls
+map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), 'bottom-right');
+map.addControl(new maplibregl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true,
+    showAccuracyCircle: true
+}), 'bottom-right');
