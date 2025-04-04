@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Open Source World Map</title>
-    <link href="style.css" rel="stylesheet" />
-    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple Mobile Map</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <link rel="stylesheet" href="styles.css" />
+ 
+  <!-- Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="https://unpkg.com/pmtiles@3.0.2/dist/pmtiles.js"></script>
+  <script src="https://unpkg.com/protomaps-leaflet@2.5.0/dist/protomaps-leaflet.min.js"></script>
+
+  <!-- PMTiles + Protomaps -->
+  <script src="https://unpkg.com/pmtiles@3.0.2/dist/pmtiles.js"></script>
+  <script src="https://unpkg.com/protomaps-leaflet@2.5.0/dist/protomaps-leaflet.min.js"></script>
 </head>
 <body>
-    <div id="map"></div>
-    <script src="main.js"></script>
+  <div id="map"></div>
+  <div id="error">⚠️ Location not available. Please enable location services and refresh.</div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <script src="map.js"></script>
 </body>
 </html>
+
