@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MapLibre App</title>
+  <title>MapLibre PMTiles App</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css" rel="stylesheet" />
 </head>
@@ -33,9 +33,16 @@
     <input type="range" id="fill-opacity" min="0" max="1" step="0.1" value="0.5" />
   </div>
 
-  <!-- 🔗 Scripts -->
-    <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js" defer></script>
-    <script src="https://unpkg.com/pmtiles@3.1.2/dist/pmtiles.umd.js" defer></script>
-    <script src="map.js" defer></script>
+  <!-- 🚀 Scripts -->
+  <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/pmtiles@3.1.2/dist/pmtiles.umd.js"></script>
+  <script>
+    // Dynamically load map.js only after everything is ready
+    window.addEventListener("load", () => {
+      const script = document.createElement("script");
+      script.src = "map.js";
+      document.body.appendChild(script);
+    });
+  </script>
 </body>
 </html>
