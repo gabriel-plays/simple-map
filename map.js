@@ -1,5 +1,5 @@
 // Initialize Leaflet map
-const map = L.map('map').setView([-25, 25], 5); // Centered roughly on Southern Africa
+const map = L.map('map').setView([-20, 25], 4); // Adjusted center and zoom
 
 // Add a base tile layer (OpenStreetMap)
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -48,8 +48,3 @@ addPmtilesButton.addEventListener('click', () => {
         alert("Please enter a PMTiles URL.");
     }
 });
-
-// Example of adding a marker (you can remove this if not needed)
-// L.marker([-25, 25]).addTo(map)
-//     .bindPopup('A sample marker.')
-//     .openPopup();
