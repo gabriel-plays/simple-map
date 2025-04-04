@@ -5,29 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Simple Mobile Map</title>
 
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-  <link rel="stylesheet" href="styles.css" />
- 
-  <!-- Libraries -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  <script src="https://unpkg.com/pmtiles@3.0.2/dist/pmtiles.js"></script>
-  <script src="https://unpkg.com/protomaps-leaflet@2.5.0/dist/protomaps-leaflet.min.js"></script>
+  <!-- MapLibre GL JS -->
+  <link href="https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@3.3.1/dist/maplibre-gl.js"></script>
 
-  <!-- PMTiles + Protomaps -->
-  <script src="https://unpkg.com/pmtiles@3.0.2/dist/pmtiles.js"></script>
-  <script src="https://unpkg.com/protomaps-leaflet@2.5.0/dist/protomaps-leaflet.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="map"></div>
-  <div id="error">⚠️ Location not available. Please enable location services and refresh.</div>
-
-  <!-- Scripts -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  <script src="map.js"></script>
+    <div id="map"></div>
+    <div id="error">⚠️ Location not available. Please enable location services and refresh.</div>
+    <div id="location-popup">
+      <div class="popup-content">
+        <p>Allow this map to access your location?</p>
+        <div class="popup-buttons">
+          <button id="allow-btn">Yes</button>
+          <button id="deny-btn">No</button>
+        </div>
+      </div>
+    </div>
+    <button id="locate-btn" title="Locate me">📍</button>
 </body>
 </html>
+
+
 
