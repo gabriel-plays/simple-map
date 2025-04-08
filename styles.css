@@ -7,7 +7,7 @@ html, body, #map {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Leaflet controls - dark and rounded */
+/* Base dark + rounded control styling */
 .leaflet-control-layers {
   background-color: rgba(30, 30, 30, 0.95);
   color: #eee;
@@ -16,7 +16,6 @@ html, body, #map {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   overflow: hidden;
 }
-
 .leaflet-control-layers label {
   color: #ccc;
   font-size: 14px;
@@ -24,12 +23,11 @@ html, body, #map {
   display: block;
   transition: background 0.2s;
 }
-
 .leaflet-control-layers label:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Locate button style */
+/* Locate button */
 .leaflet-bar a {
   background-color: #2b2b2b;
   color: white;
@@ -42,18 +40,16 @@ html, body, #map {
   border-radius: 10px;
   transition: background 0.2s;
 }
-
 .leaflet-bar a:hover {
   background-color: #444;
 }
-
 .leaflet-bar {
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* Photon Searchbar */
-.leaflet-control-photon {
+/* Geocoder control */
+.leaflet-control-geocoder {
   background-color: #2b2b2b;
   border: none;
   border-radius: 12px;
@@ -67,28 +63,24 @@ html, body, #map {
   left: 50% !important;
   top: 12px !important;
 }
-
-.leaflet-control-photon input {
+.leaflet-control-geocoder input {
   background: transparent;
   color: #fff;
   border: none;
   width: 100%;
   outline: none;
 }
-
-.leaflet-control-photon ul {
+.leaflet-control-geocoder ul {
   background: #2b2b2b;
   border-radius: 0 0 10px 10px;
   overflow: hidden;
 }
-
-.leaflet-control-photon li {
+.leaflet-control-geocoder li {
   color: #ddd;
   padding: 6px 10px;
   border-top: 1px solid #444;
 }
-
-.leaflet-control-photon li:hover {
+.leaflet-control-geocoder li:hover {
   background-color: #444;
   cursor: pointer;
 }
