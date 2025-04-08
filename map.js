@@ -1,52 +1,34 @@
 window.addEventListener('load', () => {
-    // Initialize Leaflet map
-    const map = L.map('map').setView([-20, 25], 4);
+  const map = L.map('map', {
+    center: [-20, 25],
+    zoom: 4,
+    zoomControl: true
+  });
 
-    // Add a base tile layer (OpenStreetMap)
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+  const baseLayers = {
+    "Carto Dark": L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }),
 
-    // Get references to the input and button
-    const pmtilesUrlInput = document.getElementById('pmtilesUrl');
-    const addPmtilesButton = document.getElementById('addPmtiles');
+    "Carto Light": L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }),
 
-    let currentPmtilesLayer = null;
+    "Esri Imagery": L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '',
+      maxZoom: 19
+    }),
 
-    addPmtilesButton.addEventListener('click', () => {
-        const url = pmtilesUrlInput.value;
-        if (url) {
-            if (currentPmtilesLayer) {
-                map.removeLayer(currentPmtilesLayer);
-                currentPmtilesLayer = null;
-            }
+    "OpenStreetMap": L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '',
+      maxZoom: 19
+    })
+  };
 
-            try {
-                const pmtiles = new pmtiles.PMTiles(url); // This line was line 25
-                pmtiles.leafletLayer().then(layer => {
-                    layer.addTo(map);
-                    currentPmtilesLayer = layer;
-
-                    pmtiles.getMetadata().then(metadata => {
-                        if (metadata.bounds) {
-                            map.fitBounds([
-                                [metadata.bounds[1], metadata.bounds[0]],
-                                [metadata.bounds[3], metadata.bounds[2]]
-                            ]);
-                        }
-                    });
-
-                }).catch(error => {
-                    console.error("Error adding PMTiles layer:", error);
-                    alert("Could not add PMTiles layer. Please check the URL.");
-                });
-            } catch (error) {
-                console.error("Error initializing PMTiles:", error);
-                alert("Could not initialize PMTiles. Please check the URL or library.");
-            }
-        } else {
-            alert("Please enter a PMTiles URL.");
-        }
-    });
+  baseLayers["Carto Dark"].addTo(map);
+  L.control.layers(baseLayers, null, { position: 'topright' }).addTo(map);
 });
