@@ -32,10 +32,10 @@ window.addEventListener('load', () => {
   baseLayers["Carto Dark"].addTo(map);
   L.control.layers(baseLayers, null, { position: 'topright' }).addTo(map);
 
-  // Locate Me button
+  // Locate Me control
   const locateControl = L.control({ position: 'topleft' });
   locateControl.onAdd = function () {
-    const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control rounded');
     const button = L.DomUtil.create('a', '', div);
     button.innerHTML = '📍';
     button.title = 'Locate me';
@@ -62,23 +62,4 @@ window.addEventListener('load', () => {
     return div;
   };
   locateControl.addTo(map);
-
-  // PMTiles integration (FIXED)
-  const url = 'https://tiles.gab-plays.work/boundaries.pmtiles'; // Replace with your public PMTiles URL
-  const pm = new PMTiles(url);
-
-  pm.leafletLayer().then(layer => {
-    layer.addTo(map);
-
-    pm.getMetadata().then(metadata => {
-      if (metadata.bounds) {
-        map.fitBounds([
-          [metadata.bounds[1], metadata.bounds[0]],
-          [metadata.bounds[3], metadata.bounds[2]]
-        ]);
-      }
-    });
-  }).catch(error => {
-    console.error("Error loading PMTiles layer:", error);
-  });
 });
