@@ -63,3 +63,32 @@ window.addEventListener('load', () => {
   };
   locateControl.addTo(map);
 });
+
+// Photon search control
+const photonControl = L.control.photon({
+  placeholder: "Search for places, addresses, POIs...",
+  position: 'topcenter', // We'll adjust styling manually for center
+  noResultLabel: 'No results',
+  feedbackEmail: null, // remove feedback footer
+  marker: true,
+  updateMap: true,
+  resultsHandler: function (results) {
+    const result = results[0];
+    if (!result) return;
+
+    const coords = [result.geometry.coordinates[1], result.geometry.coordinates[0]];
+    L.marker(coords).addTo(map).bindPopup(result.properties.name || "Location").openPopup();
+    map.setView(coords, 14);
+  },
+  bbox: () => {
+    const bounds = map.getBounds();
+    const paddingKm = 250 / 111; // ~250km in degrees
+
+    return [
+      bounds.getWest() - paddingKm,
+      bounds.getSouth() - paddingKm,
+      bounds.getEast() + paddingKm,
+      bounds.getNorth() + paddingKm
+    ];
+  }
+}).addTo(map);
