@@ -32,7 +32,7 @@ window.addEventListener('load', () => {
   baseLayers["Carto Dark"].addTo(map);
   L.control.layers(baseLayers, null, { position: 'topright' }).addTo(map);
 
-  // Locate Me control
+  // Locate Me button
   const locateControl = L.control({ position: 'topleft' });
   locateControl.onAdd = function () {
     const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control rounded');
@@ -62,33 +62,22 @@ window.addEventListener('load', () => {
     return div;
   };
   locateControl.addTo(map);
+
+  // Photon Geocoder
+  const geocoder = L.Control.geocoder({
+    defaultMarkGeocode: false,
+    placeholder: "Search for places, addresses, POIs...",
+    geocoder: L.Control.Geocoder.photon()
+  })
+    .on('markgeocode', function (e) {
+      const bbox = e.geocode.bbox;
+      const poly = L.polygon([
+        bbox.getSouthEast(),
+        bbox.getNorthEast(),
+        bbox.getNorthWest(),
+        bbox.getSouthWest()
+      ]).addTo(map);
+      map.fitBounds(poly.getBounds());
+    })
+    .addTo(map);
 });
-
-// Photon search control
-const photonControl = L.control.photon({
-  placeholder: "Search for places, addresses, POIs...",
-  position: 'topcenter', // We'll adjust styling manually for center
-  noResultLabel: 'No results',
-  feedbackEmail: null, // remove feedback footer
-  marker: true,
-  updateMap: true,
-  resultsHandler: function (results) {
-    const result = results[0];
-    if (!result) return;
-
-    const coords = [result.geometry.coordinates[1], result.geometry.coordinates[0]];
-    L.marker(coords).addTo(map).bindPopup(result.properties.name || "Location").openPopup();
-    map.setView(coords, 14);
-  },
-  bbox: () => {
-    const bounds = map.getBounds();
-    const paddingKm = 250 / 111; // ~250km in degrees
-
-    return [
-      bounds.getWest() - paddingKm,
-      bounds.getSouth() - paddingKm,
-      bounds.getEast() + paddingKm,
-      bounds.getNorth() + paddingKm
-    ];
-  }
-}).addTo(map);
