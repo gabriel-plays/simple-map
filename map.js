@@ -31,4 +31,37 @@ window.addEventListener('load', () => {
 
   baseLayers["Carto Dark"].addTo(map);
   L.control.layers(baseLayers, null, { position: 'topright' }).addTo(map);
+
+  // Add locate control
+  const locateControl = L.control({ position: 'topleft' });
+
+  locateControl.onAdd = function () {
+    const div = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+    const button = L.DomUtil.create('a', '', div);
+    button.innerHTML = '📍';
+    button.title = 'Locate me';
+    button.href = '#';
+
+    L.DomEvent.on(button, 'click', function (e) {
+      L.DomEvent.stop(e);
+      map.locate({ setView: true, maxZoom: 12 });
+
+      map.once('locationfound', function (e) {
+        L.circle(e.latlng, {
+          radius: e.accuracy / 2,
+          color: '#00d',
+          fillColor: '#00d',
+          fillOpacity: 0.3
+        }).addTo(map);
+      });
+
+      map.once('locationerror', function () {
+        alert("Location access denied or unavailable.");
+      });
+    });
+
+    return div;
+  };
+
+  locateControl.addTo(map);
 });
