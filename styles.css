@@ -51,3 +51,44 @@ html, body, #map {
   border-radius: 12px;
   overflow: hidden;
 }
+
+/* Photon Searchbar */
+.leaflet-control-photon {
+  background-color: #2b2b2b;
+  border: none;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-size: 15px;
+  color: #fff;
+  width: 280px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transform: translateX(-50%);
+  position: absolute !important;
+  left: 50% !important;
+  top: 12px !important;
+}
+
+.leaflet-control-photon input {
+  background: transparent;
+  color: #fff;
+  border: none;
+  width: 100%;
+  outline: none;
+}
+
+.leaflet-control-photon ul {
+  background: #2b2b2b;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+
+.leaflet-control-photon li {
+  color: #ddd;
+  padding: 6px 10px;
+  border-top: 1px solid #444;
+}
+
+.leaflet-control-photon li:hover {
+  background-color: #444;
+  cursor: pointer;
+}
