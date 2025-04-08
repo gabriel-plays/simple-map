@@ -3,16 +3,51 @@ html, body, #map {
   padding: 0;
   height: 100%;
   width: 100%;
-  background: #1a1a1a; /* Dark base */
-  font-family: sans-serif;
+  background: #1a1a1a;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Leaflet controls - dark and rounded */
 .leaflet-control-layers {
-  background-color: rgba(30, 30, 30, 0.9);
-  color: #fff;
-  border: 1px solid #444;
+  background-color: rgba(30, 30, 30, 0.95);
+  color: #eee;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
 .leaflet-control-layers label {
-  color: #ddd;
+  color: #ccc;
+  font-size: 14px;
+  padding: 4px 8px;
+  display: block;
+  transition: background 0.2s;
+}
+
+.leaflet-control-layers label:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Locate button style */
+.leaflet-bar a {
+  background-color: #2b2b2b;
+  color: white;
+  text-align: center;
+  font-size: 18px;
+  line-height: 28px;
+  width: 32px;
+  height: 32px;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+
+.leaflet-bar a:hover {
+  background-color: #444;
+}
+
+.leaflet-bar {
+  border-radius: 12px;
+  overflow: hidden;
 }
