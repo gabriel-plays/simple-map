@@ -63,9 +63,9 @@ window.addEventListener('load', () => {
   };
   locateControl.addTo(map);
 
-  // PMTiles integration
-  const url = 'https://tiles.gab-plays.work/boundaries.pmtiles'; // <--- Replace with your actual public PMTiles URL
-  const pm = new pmtiles.PMTiles(url);
+  // PMTiles integration (FIXED)
+  const url = 'https://tiles.gab-plays.work/boundaries.pmtiles'; // Replace with your public PMTiles URL
+  const pm = new PMTiles(url);
 
   pm.leafletLayer().then(layer => {
     layer.addTo(map);
