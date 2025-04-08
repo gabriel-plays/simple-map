@@ -5,15 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dark Themed Geospatial Map</title>
 
+  <!-- Leaflet CSS and JS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  
 
+  <!-- PMTiles UMD build (for leafletLayer support) -->
+  <script src="https://unpkg.com/pmtiles@2.10.0/dist/pmtiles.umd.js"></script>
+
+  <!-- Your styles -->
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div id="map"></div>
+
+  <!-- Your map logic -->
   <script src="map.js"></script>
-  <script src="https://unpkg.com/pmtiles@2.10.0/dist/index.js"></script>
 </body>
 </html>
